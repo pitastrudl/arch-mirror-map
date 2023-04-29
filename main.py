@@ -20,33 +20,19 @@ unknown_countries = {}
 unknown_countries['New Caledonia'] =  { 'latitude': '-21.1332', 'longitude' : '165.3772' }
 savedir = "savedres/"
 print(unknown_countries)
-def get_all_tier2():
-    j = requests.get("https://www.archlinux.org/mirrors/status/tier/2/json/").json()
-    selected_pairs = dict(list(filter(lambda x: x[0].startswith("url"), j.items()))[:5])
-    return selected_pairs
+
 
 # fun for checking if dns resolves to multiple addresses
 def check_dns_for_multiip():
     true = true 
     return 1
 
-# save ip loc results to json 
-def save_ip_loc(json_data, file_name):
-    try:
-        with open(file_name, 'w') as file:
-            json.dump(json_data, file)
-    except Exception as e:
-        raise Exception(f"Could not save file: {e}")
 
-# get ip loc results to json if exists
-def load_ip_loc(file_name):
-    try:
-        with open(file_name, 'r') as file:
-            json_data = json.load(file)
-        return json_data
-    except Exception as e:
-        raise Exception(f"Could not load file: {e}")
 
+def get_all_tier2():
+    j = requests.get("https://www.archlinux.org/mirrors/status/tier/2/json/").json()
+    selected_pairs = dict(list(filter(lambda x: x[0].startswith("url"), j.items()))[:5])
+    return selected_pairs
 
 def get_all_tier1():
     json_tier1 = requests.get("https://www.archlinux.org/mirrors/status/tier/1/json/").json()
@@ -172,10 +158,7 @@ def main():
             res['latitude'] = latitude
             res['longitude'] = longitude
             folium.Marker(location=[res['latitude'], res['longitude']], popup=res).add_to(m)
-            # nomi = pgeocode.Nominatim(res["country_code"])
-            # print(nomi)
-            # print(nomi.query_longitude + " " + nomi.latitude)
-            # save_ip_loc(res, res["country"])
+
         elif 'location' in location:
             print ("assigning new info")
             print(location)
@@ -185,7 +168,7 @@ def main():
             print(tier2["urls"][i])
             folium.Marker(location=[res['latitude'], res['longitude']], popup=location["ip"]).add_to(m)
         else:
-            print("didnt find loc!!! exiting",location,i,res)
+            print("didnt find loc!!! exiting and dumping data:\n",location,i,res)
             sys.exit()
         print("__________________")
         
