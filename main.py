@@ -136,7 +136,7 @@ def save_country(country_name, country_data):
 
     with open('countries.json', 'w') as f:
         json.dump(countries, f)
-    
+
     return True
 
 def ip_is_saved(ip):
@@ -173,7 +173,7 @@ def save_ip(ip, ip_data):
 
     with open('ips.json', 'w') as f:
         json.dump(ips, f)
-        
+
     return True
 
 def get_lat_long_kamoot(country):
@@ -263,11 +263,12 @@ def main():
             print(tier2["urls"][i])
             folium.Marker(location=[res['latitude'], res['longitude']], popup=location["ip"]).add_to(m)
         else:
-            print("didnt find loc!!! ",location,i,res)
+            print("didnt find loc!!! exiting",location,i,res)
             sys.exit()
         print("__________________")
         
         # print (json_tier1["urls"][i])
+    print("writng map to disk")
     m.save('map.html')
     sys.exit()
 
