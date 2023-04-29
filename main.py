@@ -67,14 +67,22 @@ def locate_mirror(url):
 
         try:
             for ip in sorted(set([i[4][0] for i in socket.getaddrinfo(domain, None)])):
-                print("trying domain: ", domain , ", finding for ip:" + ip)
-                mirror_loc = reader.get(ip)
-                print(mirror_loc)
-                if mirror_loc is not None:
+                if ip_is_saved(ip):
+                    lat_ip, lng_ip = load_saved_ip(ip)
+                    mirror_loc['location'] = {'latitude' : lat_ip,
+                                             'longitude' : lng_ip}
                     mirror_loc["ip"]= ip
+                    return mirror_loc
                 else:
-                    print("my_object is None, cannot assign value")
-                
+                    print("trying domain: ", domain , ", finding for ip:" + ip)
+                    mirror_loc = reader.get(ip)
+                    print(mirror_loc)
+                    if mirror_loc is not None:
+                        mirror_loc["ip"]= ip
+                        save_ip(ip, {"latitude": mirror_loc['location']['latitude'],"longitude": mirror_loc['location']['longitude']} )
+                    else:
+                        print("my_object is None, cannot assign value")
+                    
         except socket.gaierror:
             print("got exception for " + domain)
             pass
