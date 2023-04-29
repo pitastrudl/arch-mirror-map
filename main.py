@@ -69,11 +69,12 @@ def locate_mirror(url):
             for ip in sorted(set([i[4][0] for i in socket.getaddrinfo(domain, None)])):
                 print("ip loop in mirrorloc ",ip)
                 if ip_is_saved(ip):
+                    loaded_mirror_loc = {}
                     lat_ip, lng_ip = load_saved_ip(ip)
-                    mirror_loc['location'] = {'latitude' : lat_ip,
+                    loaded_mirror_loc['location'] = {'latitude' : lat_ip,
                                              'longitude' : lng_ip}
-                    mirror_loc["ip"]= ip
-                    return mirror_loc
+                    loaded_mirror_loc["ip"]= ip
+                    return loaded_mirror_loc
                 else:
                     print("trying domain: ", domain , ", finding for ip:" + ip)
                     mirror_loc = reader.get(ip)
