@@ -151,7 +151,7 @@ def main():
     loc_res=[]
     for i, res in enumerate(tier2["urls"]):
         location = locate_mirror(res)  # outputs data from geoip
-        if not location:
+        if not location or 'location' not in  location:
             print("could not locate with func,checking in json:")
             print(res["country"])
 
