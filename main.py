@@ -213,13 +213,6 @@ def main():
     #     associate with upstream details 
     #     save association to dict? 
 
-    # last_executed_time = time.time()
-    # current_time = time.time()
-    # if current_time - last_executed_time > 1.0:  # check if more than 1 second has passed
-    #     # do something
-    #     print("Function executed more than 1 second ago.")
-    #     last_executed_time = current_time  # update the last executed time
-
 
     tier1=get_all_tier1()
     # result=
@@ -267,65 +260,8 @@ def main():
             sys.exit()
         print("__________________")
         
-        # print (json_tier1["urls"][i])
     print("writng map to disk")
     m.save('map.html')
     sys.exit()
-
-
-
-
-
-
-    countries = []
-    ips = []
-    m = folium.Map(location=[0, 0], zoom_start=2)
-    offset=0.0
-    missingips= []
-    maincnt=0
-    limit=5
-    for mirror in tier2["urls"]:
-        if mirror["protocol"] == "http":
-            countries.append(mirror["country"])
-            domain = re.match('^https?://([^/]+)(?:/.*)?$', mirror['url']).group(1)
-            reader = geolite2.reader()
-            # doing the upstream retrevial
-            print(mirror) 
-            new_url = "/".join(mirror["details"].split("/")[:-2]) + "/json"
-            k = requests.get(new_url).json()
-            print("upstream for: ", new_url, " is :", k["upstream"])
-            
-            try:
-                for ip in sorted(set([i[4][0] for i in socket.getaddrinfo(domain, None)])):
-                    print("finding for ip:" + ip)
-                    json_str = reader.get(ip)
-                    print(json_str)
-                    if not json_str:
-                        continue
-
-                    if 'location' in json_str:
-                        print("got ip "+ip + " "  + str(json_str['location']['latitude']) + " " +  str(json_str['location']['longitude']))
-                        ips.append((ip,json_str['location']['latitude'],json_str['location']['longitude']))
-                        folium.Marker(location=[json_str['location']['latitude'], json_str['location']['longitude']], popup=ip).add_to(m)
-                    
-                    else:
-                        offset+=1
-                        folium.Marker(location=[offset,0.0], popup=ip).add_to(m)
-                        missingips.append(ip)
-                    print("___________________")
-            except socket.gaierror:
-                print("got exception for "+domain)
-                pass
-        maincnt+=1
-        print("main cnt is: ",maincnt)
-        if maincnt > limit:
-            print(maincnt)
-            print("limit reached")
-            break 
-    
-    m.save('map.html')
-    print(missingips)
-    # m = toMap()
-    # m.setMap(countries, ips, "mirror-map.svg")
 
 main()
