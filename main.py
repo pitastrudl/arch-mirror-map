@@ -130,7 +130,42 @@ def save_country(country_name, country_data):
         json.dump(countries, f)
     
     return True
-    
+
+def ip_is_saved(ip):
+    try:
+        with open('ips.json') as f:
+            data = json.load(f)
+        return ip in data if data else False
+    except FileNotFoundError:
+        return False
+
+def load_saved_ip(ip):
+    with open('ips.json') as f:
+        data = json.load(f)
+        ip = data[ip]
+    return ip["latitude"], ip["longitude"]
+
+
+def save_ip(ip, ip_data):
+    try:
+        with open('ips.json') as f:
+            ips = json.load(f)
+    except FileNotFoundError:
+        ips = {}
+
+    if ip in ips:
+        print("Country already exists in JSON file")
+        return False
+
+    try:
+        ips[ip] = ip_data
+    except Exception as e:
+        print(f"Failed to add new country: {e}")
+        return False
+
+    with open('ips.json', 'w') as f:
+        json.dump(ips, f)
+        
     return True
 
 def get_lat_long_kamoot(country):
