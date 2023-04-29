@@ -79,7 +79,7 @@ def locate_mirror(url):
                     print("trying domain: ", domain , ", finding for ip:" + ip)
                     mirror_loc = reader.get(ip)
                     print(mirror_loc)
-                    if mirror_loc is not None:
+                    if mirror_loc is not None and 'location' in mirror_loc and mirror_loc['location']:
                         mirror_loc["ip"]= ip
                         save_ip(ip, {"latitude": mirror_loc['location']['latitude'],"longitude": mirror_loc['location']['longitude']} )
                     else:
