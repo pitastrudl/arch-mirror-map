@@ -194,10 +194,7 @@ def main():
             latitude = ""
             longitude = ""
             latitude, longitude = get_lat_long_kamoot(res["country"])
-            if os.path.isfile(savedir + res["country"]):
-                loadeddata = load_ip_loc(res["country"])
-
-            elif not isinstance(latitude, str)  and not isinstance(longitude, str)  :
+            if not isinstance(latitude, str)  and not isinstance(longitude, str)  :
                 print("trying with nominatim!!!")
                 latitude, longitude = get_lat_long_nominatim(res["country"])
             elif res["country"] in  unknown_countries:
