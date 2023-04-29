@@ -1,5 +1,5 @@
 import json
-
+ips = ""
 # append or create to json with ip and lat/long coords
 def save_ip_loc(json_data, file_name):
     try:
@@ -56,19 +56,29 @@ def save_country(country_name, country_data):
     return True
 
 def ip_is_saved(ip):
-    try:
-        with open('ips.json') as f:
-            data = json.load(f)
-        return ip in data if data else False
-    except FileNotFoundError:
-        return False
+    global ips
+    if ips == "":
+        try:
+            with open('ips.json') as f:
+                ips = json.load(f)
+            return ip in ips if ips else False
+        except FileNotFoundError:
+            return False
+    else:
+        print("found ip in cache")
+        return ip in ips if ips else False
 
 def load_saved_ip(ip):
-    with open('ips.json') as f:
-        data = json.load(f)
-        ip = data[ip]
-    return ip["latitude"], ip["longitude"]
-
+    global ips
+    if ips == "":
+        with open('ips.json') as f:
+            data = json.load(f)
+            ip = data[ip]
+        return ip["latitude"], ip["longitude"]
+    else:
+        print("loading ip from cache")
+        ip = ips[ip]
+        return ip["latitude"], ip["longitude"]
 
 def save_ip(ip, ip_data):
     try:
