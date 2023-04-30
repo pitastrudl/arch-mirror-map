@@ -107,6 +107,45 @@ def get_lat_long_kamoot(country):
             print("Request error:", e)
         return None, None
     
+def tier_to_markers_on_map(m,tier,iconcolor,reader):
+    for i, res in enumerate(tier["urls"]):
+        print("res from tier urls: \n", res)
+        location = locate_mirror(res,reader)  # outputs data from geoip
+        if not location or 'location' not in  location:
+            print("could not locate with func,checking in json:")
+            print(res["country"])
+
+            # getting lat long for the country
+            latitude = ""
+            longitude = ""
+            latitude, longitude = get_lat_long_kamoot(res["country"])
+            if not isinstance(latitude, str)  and not isinstance(longitude, str)  :
+                print("trying with nominatim!!!")
+                latitude, longitude = get_lat_long_nominatim(res["country"])
+            elif res["country"] in  unknown_countries:
+                print(unknown_countries)
+                latitude = unknown_countries[res["country"]]["latitude"]
+                longitude =  unknown_countries[res["country"]]["longitude"]
+            else:
+                print("ehh, didnt find ip for country")
+            print(f"Latitude: {latitude}, Longitude: {longitude}")
+            res['latitude'] = latitude
+            res['longitude'] = longitude
+            folium.Marker(location=[res['latitude'], res['longitude']],popup=res, icon=folium.Icon(color=iconcolor)).add_to(m)
+
+        elif 'location' in location:
+            print ("assigning new info")
+            print(location)
+            res['latitude'] = location['location']['latitude']
+            res['longitude'] = location['location']['longitude']
+            tier["urls"][i] = res 
+            print(tier["urls"][i])
+            folium.Marker(location=[res['latitude'] + random.uniform(0.10, 0.15), res['longitude'] + random.uniform(0.10, 0.15)],popup=location["ip"],icon=folium.Icon(color=iconcolor)).add_to(m)
+            random.uniform(0.10, 0.15)
+        else:
+            print("didnt find loc!!! exiting and dumping data:\n",location,i,res)
+            sys.exit()
+        print("__________________")
 
 def main():
     # - get all tier1 mirrors 
@@ -133,46 +172,16 @@ def main():
     tier2=get_all_tier2()
     # for mirror in tier2["urls"]:
     m = folium.Map(location=[0, 0], zoom_start=2)
-    loc_res=[]
-    for i, res in enumerate(tier2["urls"]):
-        location = locate_mirror(res)  # outputs data from geoip
-        if not location or 'location' not in  location:
-            print("could not locate with func,checking in json:")
-            print(res["country"])
-
-            # getting lat long for the country
-            latitude = ""
-            longitude = ""
-            latitude, longitude = get_lat_long_kamoot(res["country"])
-            if not isinstance(latitude, str)  and not isinstance(longitude, str)  :
-                print("trying with nominatim!!!")
-                latitude, longitude = get_lat_long_nominatim(res["country"])
-            elif res["country"] in  unknown_countries:
-                print(unknown_countries)
-                latitude = unknown_countries[res["country"]]["latitude"]
-                longitude =  unknown_countries[res["country"]]["longitude"]
-            else:
-                print("ehh, didnt find ip for country")
-            print(f"Latitude: {latitude}, Longitude: {longitude}")
-            res['latitude'] = latitude
-            res['longitude'] = longitude
-            folium.Marker(location=[res['latitude'], res['longitude']], popup=res).add_to(m)
-
-        elif 'location' in location:
-            print ("assigning new info")
-            print(location)
-            res['latitude'] = location['location']['latitude']
-            res['longitude'] = location['location']['longitude']
-            tier2["urls"][i] = res 
-            print(tier2["urls"][i])
-            folium.Marker(location=[res['latitude'], res['longitude']], popup=location["ip"]).add_to(m)
-        else:
-            print("didnt find loc!!! exiting and dumping data:\n",location,i,res)
-            sys.exit()
-        print("__________________")
+    reader = geolite2.reader()
+    tier1_color="red"
+    tier2_color="green"
+    tier_to_markers_on_map(m,tier1,tier1_color,reader)
+    tier_to_markers_on_map(m,tier2,tier2_color,reader)
         
+
+
     print("writng map to disk")
-    m.save('map.html')
+    m.save('map2.html')
     sys.exit()
 
 main()
