@@ -77,8 +77,7 @@ def load_saved_ip(ip):
         return ip["latitude"], ip["longitude"]
     else:
         print("loading ip from cache")
-        ip = ips[ip]
-        return ip["latitude"], ip["longitude"]
+        return ips[ip]["latitude"], ips[ip]["longitude"]
 
 def save_ip(ip, ip_data):
     try:
