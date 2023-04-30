@@ -45,15 +45,14 @@ def get_all_tier1():
 
     return json_tier1 
 
-def locate_mirror(url):
+def locate_mirror(url,reader):
     mirror_loc={}
     if url["protocol"] == "http" or url["protocol"] == "https" :
         domain = re.match('^https?://([^/]+)(?:/.*)?$', url['url']).group(1)
-        reader = geolite2.reader()
-
+        
         try:
             for ip in sorted(set([i[4][0] for i in socket.getaddrinfo(domain, None)])):
-                print("ip loop in mirrorloc ",ip)
+                print("ip loop in mirrorloc:\n",ip)
                 if ip_is_saved(ip):
                     loaded_mirror_loc = {}
                     lat_ip, lng_ip = load_saved_ip(ip)
