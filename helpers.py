@@ -48,7 +48,9 @@ def save_ip(ip, ip_data):
 
     return True
 
-def country_is_saved(country):
+def country_is_saved(arg_country):
+    country = arg_country.strip()
+    global countries 
     if country in countries:
         return country in countries if countries else False
     else:
