@@ -63,14 +63,11 @@ def load_saved_country(country):
     global countries
     if countries == "":
         with open('countries.json') as f:
-            data = json.load(f)
-            country = data[country]
+            countries = json.load(f)
+            country = countries[country]
         return country["latitude"], country["longitude"]
     else:
-        with open('countries.json') as f:
-            data = json.load(f)
-            country = data[country]
-        return country["latitude"], country["longitude"]
+        return countries[country]["latitude"], countries[country]["longitude"]
 
 
 def save_country(country_name, country_data):
