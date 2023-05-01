@@ -2,6 +2,23 @@ import json
 ips = ""
 countries= ""
 
+def get_upstream_from_tier2(tier_details_url):
+    pattern = r'^(https?://[^/]+/[^/]+)/[^/]+/'
+    match = re.match(pattern, tier_details_url)
+    if match:
+        new_url = match.group(0) + 'json'
+        print(new_url)
+        mirror_details = requests.get(new_url).json()
+        if "upstream" not in mirror_details.keys():
+            return "no_upstream"
+        else:
+            print("mirror upstream is:\n",mirror_details["upstream"])
+            return mirror_details["upstream"]
+
+
+    else:
+        print("did not find upstream url, missing info! ask Arch team to fix")
+        sys.exit()
 def ip_is_saved(ip):
     global ips
     if ips == "":
