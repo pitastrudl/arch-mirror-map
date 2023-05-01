@@ -145,8 +145,9 @@ def tier_to_markers_on_map(m,tier,iconcolor,reader,tiername):
             print(tier["urls"][i])
             if tiername == "tier2":
                 res['upstream'] = get_upstream_from_tier2(res['details'])
-            folium.Marker(location=[res['latitude'] + random.uniform(0.10, 0.15), res['longitude'] + random.uniform(0.10, 0.15)],popup=location["ip"] + res['upstream'],icon=folium.Icon(color=iconcolor)).add_to(m)
-            random.uniform(0.10, 0.15)
+                folium.Marker(location=[res['latitude'] + random.uniform(0.10, 0.15), res['longitude'] + random.uniform(0.10, 0.15)],popup=location["ip"] + res['upstream'],icon=folium.Icon(color=iconcolor)).add_to(m)
+            else:
+                folium.Marker(location=[res['latitude'] + random.uniform(0.10, 0.15), res['longitude'] + random.uniform(0.10, 0.15)],popup=location["ip"],icon=folium.Icon(color=iconcolor)).add_to(m)
         else:
             print("didnt find loc!!! exiting and dumping data:\n",location,i,res)
             sys.exit()
