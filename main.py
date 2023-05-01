@@ -180,8 +180,8 @@ def main():
     reader = geolite2.reader()
     tier1_color="red"
     tier2_color="green"
-    tier_to_markers_on_map(m,tier1,tier1_color,reader)
-    tier_to_markers_on_map(m,tier2,tier2_color,reader)
+    tier_to_markers_on_map(m,tier1,tier1_color,reader,"tier1")
+    tier_to_markers_on_map(m,tier2,tier2_color,reader,"tier2")
         
 
 
