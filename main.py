@@ -107,7 +107,7 @@ def get_lat_long_kamoot(country):
             print("Request error:", e)
         return None, None
     
-def tier_to_markers_on_map(m,tier,iconcolor,reader):
+def tier_to_markers_on_map(m,tier,iconcolor,reader,tiername):
     for i, res in enumerate(tier["urls"]):
         print("res from tier urls: \n", res)
         location = locate_mirror(res,reader)  # outputs data from geoip
@@ -131,6 +131,9 @@ def tier_to_markers_on_map(m,tier,iconcolor,reader):
             print(f"Latitude: {latitude}, Longitude: {longitude}")
             res['latitude'] = latitude
             res['longitude'] = longitude
+            if tiername == "tier2":
+                res['upstream'] = get_upstream_from_tier2(res['details'])
+
             folium.Marker(location=[res['latitude'], res['longitude']],popup=res, icon=folium.Icon(color=iconcolor)).add_to(m)
 
         elif 'location' in location:
@@ -140,7 +143,9 @@ def tier_to_markers_on_map(m,tier,iconcolor,reader):
             res['longitude'] = location['location']['longitude']
             tier["urls"][i] = res 
             print(tier["urls"][i])
-            folium.Marker(location=[res['latitude'] + random.uniform(0.10, 0.15), res['longitude'] + random.uniform(0.10, 0.15)],popup=location["ip"],icon=folium.Icon(color=iconcolor)).add_to(m)
+            if tiername == "tier2":
+                res['upstream'] = get_upstream_from_tier2(res['details'])
+            folium.Marker(location=[res['latitude'] + random.uniform(0.10, 0.15), res['longitude'] + random.uniform(0.10, 0.15)],popup=location["ip"] + res['upstream'],icon=folium.Icon(color=iconcolor)).add_to(m)
             random.uniform(0.10, 0.15)
         else:
             print("didnt find loc!!! exiting and dumping data:\n",location,i,res)
