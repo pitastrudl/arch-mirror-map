@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from helpers import *
 import csv
 import sys,os
 import requests
@@ -16,6 +15,10 @@ import pycountry_convert as pc
 import pgeocode
 import time, random
 from geopy.geocoders import Nominatim
+
+from .helpers import *
+
+
 unknown_countries = {}
 unknown_countries['New Caledonia'] =  { 'latitude': '-21.1332', 'longitude' : '165.3772' }
 savedir = "savedres/"

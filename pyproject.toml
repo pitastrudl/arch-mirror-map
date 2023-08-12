@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=67.5"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arch-mirror-map"
+dynamic = ["entry-points"]
+version = "0.1"
+description = "Python project to show current mirrors on a map, trying to geolocate via IP"
+authors = [
+    {name = "Arun Bahl", email = "pitastrudl@gmail.com"},
+    {name = "Anton Hvornum", email = "torxed@archlinux.org"},
+]
+license = {text = "AGPL-1.0-or-later"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "geoip2",
+    "folium",
+    "maxminddb-geolite2",
+    "pycountry_convert",
+    "pgeocode",
+    "geopy"
+]
+
+keywords = ["arch", "linux", "mirrors", "map"]
+
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: POSIX :: Linux",
+]
+
+[project.urls]
+Home = "https://archlinux.org/mirrors/"
+Documentation = "https://arch-mirror-map.readthedocs.io/"
+Source = "https://github.com/Torxed/arch-mirror-map.git"
+
+[project.scripts]
+arch-mirror-map = "arch_mirror_map:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["arch_mirror_map"]
+
+[options.packages.find]
+where="arch_mirror_map/"
+
+[options.package_data]
+# Which file types to include when building
+arch_mirror_map = ["**/*.py", "**/*.toml"]
+
+[tool.setuptools.package-data]
+# Which file types to include when building
+# (second time because package-data is in beta still)
+arch_mirror_map = ["**/*.py", "**/*.toml"]
