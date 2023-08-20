@@ -172,7 +172,13 @@ def main():
     #     associate with upstream details 
     #     save association to dict? 
 
-
+    url = 'https://www.archlinux.org/mirrors/status/tier/2/json/'
+    # results = get_upstream_from_tier2_paralel(url)
+    loop = asyncio.get_event_loop()
+    result = loop.run_until_complete(get_upstream_from_tier2_paralel(url))
+    print(result)
+    print("finished")
+    sys.exit()
     tier1=get_all_tier1()
     # result=
     tier2=get_all_tier2()
@@ -183,7 +189,7 @@ def main():
     tier2_color="green"
     tier_to_markers_on_map(m,tier1,tier1_color,reader,"tier1")
     tier_to_markers_on_map(m,tier2,tier2_color,reader,"tier2")
-        
+
 
 
     print("writng map to disk")
