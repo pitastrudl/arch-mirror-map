@@ -3,7 +3,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main  # Replace with your default branch if not 'main'
+      - main
       - github_ci
 
 jobs:
@@ -19,23 +19,26 @@ jobs:
       with:
         python-version: 3.11  # Or the version you use
 
-    - name: Install Poetry
-      run: pip install poetry
+    - name: Install Build Tools
+      run: pip install build installer
 
-    - name: Install Dependencies
-      run: poetry install
+    - name: Build Project
+      run: python -m build .
+
+    - name: Install Wheel
+      run: sudo python -m installer dist/*.whl
 
     - name: Run Project
-      run: poetry run python -m arch_mirror_map
+      run: arch-mirror-map
 
     - name: Find map2.html
       run: find . -name 'map2.html'
 
-    - name: Upload map.html
+    - name: Upload map2.html
       uses: actions/upload-artifact@v2
       with:
         name: map-html
-        path: map2.html  # Replace this with the actual path to your map.html
+        path: map2.html  # Replace this with the actual path to your map2.html
 
   deploy:
     runs-on: ubuntu-latest
@@ -45,7 +48,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: Download map.html
+    - name: Download map2.html
       uses: actions/download-artifact@v2
       with:
         name: map-html
@@ -54,4 +57,4 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./map2.html  # Replace this with the actual path to your map.html
+        publish_dir: ./map2.html  # Replace this with the actual path to your map2.html
