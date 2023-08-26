@@ -20,7 +20,8 @@ dependencies = [
     "maxminddb-geolite2",
     "pycountry_convert",
     "pgeocode",
-    "geopy"
+    "geopy",
+    "requests"
 ]
 
 keywords = ["arch", "linux", "mirrors", "map"]
