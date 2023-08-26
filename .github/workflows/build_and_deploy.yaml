@@ -19,17 +19,14 @@ jobs:
       with:
         python-version: 3.11  # Or the version you use
 
-    - name: Install build and installer
-      run: pip install build installer
+    - name: Install Poetry
+      run: pip install poetry
 
-    - name: Build Project
-      run: python -m build .
-
-    - name: Install Project
-      run: sudo python -m installer dist/*.whl
+    - name: Install Dependencies
+      run: poetry install
 
     - name: Run Project
-      run: arch-mirror-map
+      run: poetry run python -m arch_mirror_map
 
 
     - name: where is file
