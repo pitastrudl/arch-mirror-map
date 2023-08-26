@@ -23,7 +23,7 @@ jobs:
       run: pip install poetry
 
     - name: where is file
-      run: ls -la 
+      run: find .
       working-directory: ..
 
     - name: Install Dependencies
