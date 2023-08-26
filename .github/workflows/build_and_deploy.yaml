@@ -26,7 +26,7 @@ jobs:
       run: python -m build .
 
     - name: Install Wheel
-      run: sudo python -m installer dist/*.whl
+      run: pip install dist/*.whl
 
     - name: Run Project
       run: arch-mirror-map
