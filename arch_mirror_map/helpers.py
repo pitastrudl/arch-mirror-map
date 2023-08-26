@@ -7,9 +7,15 @@ def check_dns_for_multiip():
     true = true 
     return 1
 
-def get_all_tier2():
+def get_all_tier2(num_pairs=None):
     j = requests.get("https://www.archlinux.org/mirrors/status/tier/2/json/").json()
-    selected_pairs = dict(list(filter(lambda x: x[0].startswith("url"), j.items()))[:5])
+
+    selected_pairs = j['urls']
+    
+    # If num_pairs is specified, limit the number of pairs
+    if num_pairs is not None:
+        selected_pairs = selected_pairs[:num_pairs]
+        
     return selected_pairs
 
 def get_all_tier1():

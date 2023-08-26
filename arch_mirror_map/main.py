@@ -48,7 +48,7 @@ def main():
 
     tier1=get_all_tier1()
     # result=
-    tier2=get_all_tier2()
+    tier2=get_all_tier2(10)
     # for mirror in tier2["urls"]:
     m = folium.Map(location=[0, 0], zoom_start=2)
     reader = geolite2.reader()
