@@ -22,21 +22,14 @@ jobs:
     - name: Install Poetry
       run: pip install poetry
 
-    - name: where is file
-      run: find .
-      working-directory: ../
-
     - name: Install Dependencies
       run: poetry install
-      working-directory: ../
 
     - name: Run Project
-      run: poetry run python -m arpyprojectch_mirror_map
+      run: poetry run python -m arch_mirror_map
 
-
-    - name: where is file
+    - name: Find map2.html
       run: find . -name 'map2.html'
-
 
     - name: Upload map.html
       uses: actions/upload-artifact@v2
