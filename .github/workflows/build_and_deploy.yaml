@@ -24,11 +24,11 @@ jobs:
 
     - name: where is file
       run: find .
-      working-directory: ..
+      working-directory: ./arch-mirror-map
 
     - name: Install Dependencies
       run: poetry install
-      working-directory: .
+      working-directory: ./arch-mirror-map
 
     - name: Run Project
       run: poetry run python -m arpyprojectch_mirror_map
